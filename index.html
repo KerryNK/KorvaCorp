@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Korva Global Corporation</title>
+    <style>
+      :root {
+        --bg: #000000;
+        --panel: #0b0b0d;
+        --panel-strong: #111214;
+        --line: rgba(255,255,255,0.09);
+        --text: #f7f7f5;
+        --muted: #a1a1aa;
+        --muted-2: #71717a;
+        --white: #ffffff;
+        --green: #34d399;
+        --amber: #fbbf24;
+        --shadow: rgba(255,255,255,0.08);
+      }
+
+      * { box-sizing: border-box; }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img { max-width: 100%; display: block; }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      html, body {
+        overflow-x: hidden;
+      }
+
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .page {
+        position: relative;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        overflow-x: hidden;
+        isolation: isolate;
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .topbar {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .topbar.scrolled {
+        border-bottom: 1px solid var(--line);
+        background: rgba(0,0,0,0.78);
+        backdrop-filter: blur(18px);
+      }
+
+      .nav {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        padding: 0 24px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-logo {
+        height: 28px;
+        width: auto;
+        display: block;
+      }
+
+      .hero-logo {
+        display: block;
+        width: min(280px, 60vw);
+        height: auto;
+        margin: 0 auto 32px;
+        opacity: 0;
+        animation: logo-in 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;
+      }
+
+      @keyframes logo-in {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .badge {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--line);
+        background: rgba(17,18,20,0.8);
+        display: grid;
+        place-items: center;
+        border-radius: 4px;
+      }
+
+      .badge::before {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border: 1px solid rgba(255,255,255,0.35);
+        border-radius: 2px;
+      }
+
+      .badge span {
+        position: relative;
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: 0.24em;
+      }
+
+      .brand-name {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.32em;
+        font-weight: 900;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 34px;
+      }
+
+      .nav-links a {
+        font-size: 10px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--muted);
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus {
+        color: var(--white);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .magnetic {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: #000;
+        text-transform: uppercase;
+        letter-spacing: 0.24em;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 12px 18px;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+        will-change: transform;
+      }
+
+      .magnetic.light {
+        background: transparent;
+        color: var(--text);
+      }
+
+      .magnetic:hover {
+        border-color: rgba(255,255,255,0.6);
+      }
+
+      .menu-button {
+        display: none;
+        position: relative;
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--line);
+        background: rgba(0,0,0,0.4);
+        color: var(--text);
+        padding: 0;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      }
+
+      .menu-button:hover {
+        border-color: rgba(255,255,255,0.6);
+      }
+
+      .menu-button-lines {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .menu-button-lines span {
+        position: absolute;
+        left: 11px;
+        width: 20px;
+        height: 1px;
+        background: var(--white);
+        display: block;
+        transition: transform 0.25s ease, opacity 0.2s ease, top 0.25s ease;
+      }
+
+      .menu-button-lines span:nth-child(1) { top: 15px; }
+      .menu-button-lines span:nth-child(2) { top: 20px; }
+      .menu-button-lines span:nth-child(3) { top: 25px; }
+
+      .menu-button.is-open {
+        background: rgba(255,255,255,0.08);
+      }
+
+      .menu-button.is-open .menu-button-lines span:nth-child(1) {
+        top: 20px;
+        transform: rotate(45deg);
+      }
+
+      .menu-button.is-open .menu-button-lines span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .menu-button.is-open .menu-button-lines span:nth-child(3) {
+        top: 20px;
+        transform: rotate(-45deg);
+      }
+
+      @media (max-width: 767px) {
+        .nav-links {
+          display: none;
+        }
+
+        .nav .magnetic.hide-mobile {
+          display: none;
+        }
+
+        .menu-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .mobile-menu {
+        display: none;
+        border-top: 1px solid var(--line);
+        background: rgba(0,0,0,0.96);
+        padding: 24px 20px 28px;
+      }
+
+      .mobile-menu.open {
+        display: block;
+      }
+
+      .mobile-menu a {
+        display: block;
+        padding: 10px 0;
+        font-size: 10px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.7);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        min-height: 100vh;
+        display: flex;
+        align-items: end;
+        padding: 120px 0 72px;
+        isolation: isolate;
+      }
+
+      .hero-video {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .hero-overlay {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.9) 100%);
+        z-index: 1;
+      }
+
+      main {
+        position: relative;
+        z-index: 2;
+      }
+
+      .section,
+      .hero {
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+      }
+
+      .eyebrow {
+        margin: 0 0 28px;
+        font-size: 10px;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .headline {
+        margin: 0 0 24px;
+        max-width: 1100px;
+        font-size: clamp(3.2rem, 7vw, 7rem);
+        line-height: 0.88;
+        letter-spacing: -0.08em;
+        font-weight: 900;
+      }
+
+      .word-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25em 0.4em;
+      }
+
+      .word {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(90px);
+        filter: blur(10px);
+        animation: word-in 0.75s cubic-bezier(0.22,1,0.36,1) forwards;
+      }
+
+      .word:nth-child(2) { animation-delay: 0.32s; }
+      .word:nth-child(3) { animation-delay: 0.44s; }
+      .word:nth-child(4) { animation-delay: 0.56s; }
+      .word:nth-child(5) { animation-delay: 0.68s; }
+
+      @keyframes word-in {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+          filter: blur(0px);
+        }
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .subhead {
+        margin: 0 0 32px;
+        max-width: 620px;
+        font-size: 18px;
+        color: rgba(255,255,255,0.65);
+        line-height: 1.7;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .scroll-line {
+        position: absolute;
+        right: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        color: var(--muted-2);
+      }
+
+      .scroll-line .bar {
+        width: 1px;
+        height: 76px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.1), transparent);
+      }
+
+      .scroll-line .label {
+        writing-mode: vertical-rl;
+        font-size: 9px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+      }
+
+      .section {
+        border-top: 1px solid var(--line);
+        padding: 96px 0;
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: 0.8fr 1.4fr;
+        gap: 48px 64px;
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 4rem);
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+        font-weight: 900;
+      }
+
+      .lede {
+        max-width: 760px;
+        font-size: clamp(1.2rem, 2vw, 2.2rem);
+        color: rgba(255,255,255,0.8);
+        margin: 0;
+        line-height: 1.4;
+      }
+
+      .rule {
+        height: 1px;
+        background: var(--line);
+        margin: 34px 0;
+      }
+
+      .muted {
+        max-width: 620px;
+        margin: 0;
+        color: rgba(255,255,255,0.5);
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .stats-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 28px;
+      }
+
+      .stat-box {
+        border: 1px solid var(--line);
+        background: rgba(17,17,20,0.65);
+        padding: 24px 20px;
+      }
+
+      .stat-number {
+        margin: 0 0 10px;
+        font-size: 9px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .stat-box strong {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .stat-box span {
+        color: rgba(255,255,255,0.55);
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .portfolio-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+      }
+
+      .portfolio-card {
+        position: relative;
+        min-height: 500px;
+        padding: 32px 28px;
+        background: #000;
+        border: 1px solid transparent;
+        overflow: hidden;
+        transition: border-color 0.25s ease, transform 0.2s ease;
+      }
+
+      .portfolio-card:hover {
+        border-color: rgba(255,255,255,0.55);
+      }
+
+      .portfolio-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        background: radial-gradient(circle at 20% 20%, rgba(34,197,94,0.22) 0%, rgba(0,0,0,0) 38%);
+      }
+
+      .portfolio-card:nth-child(2)::before {
+        background: radial-gradient(circle at 20% 20%, rgba(251,191,36,0.18) 0%, rgba(0,0,0,0) 38%);
+      }
+
+      .portfolio-card:hover::before {
+        opacity: 1;
+      }
+
+      .portfolio-card-inner {
+        position: relative;
+        z-index: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 12px;
+        margin-bottom: 26px;
+      }
+
+      .card-kicker {
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-size: 9px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+      }
+
+      .card-index {
+        margin: 0;
+        font-size: 9px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--muted-2);
+      }
+
+      .card-icon {
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--line);
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+      }
+
+      .card-title {
+        margin: 0;
+        font-size: clamp(2.2rem, 4vw, 4.5rem);
+        line-height: 0.92;
+        letter-spacing: -0.06em;
+        font-weight: 900;
+        white-space: pre-line;
+      }
+
+      .card-divider {
+        height: 1px;
+        width: 100%;
+        background: var(--line);
+        margin: 24px 0;
+        transition: background 0.3s ease;
+      }
+
+      .portfolio-card:hover .card-divider {
+        background: rgba(255,255,255,0.5);
+      }
+
+      .portfolio-card p {
+        margin: 0;
+        max-width: 450px;
+        color: rgba(255,255,255,0.65);
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 26px 0 20px;
+        color: rgba(255,255,255,0.55);
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 9px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+
+      .status-dot.green { background: var(--green); }
+      .status-dot.amber { background: var(--amber); }
+
+      .card-button {
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text);
+        font-size: 10px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        padding: 14px 18px;
+        font-weight: 700;
+        transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      }
+
+      .card-button:hover {
+        background: var(--white);
+        color: #000;
+        border-color: var(--white);
+      }
+
+      .leadership-wrap {
+        display: grid;
+        gap: 32px;
+        grid-template-columns: 1.35fr 0.8fr;
+      }
+
+      .leaders {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .leader {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        border: 1px solid var(--line);
+        background: rgba(17,17,20,0.6);
+        padding: 18px 18px 16px;
+      }
+
+      .leader-badge {
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--line);
+        background: #000;
+        display: grid;
+        place-items: center;
+        font-size: 10px;
+        letter-spacing: 0.26em;
+        color: rgba(255,255,255,0.6);
+        font-weight: 900;
+      }
+
+      .leader-name {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: -0.04em;
+        font-weight: 700;
+      }
+
+      .leader-role {
+        margin: 6px 0 0;
+        font-size: 9px;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .leader-copy {
+        margin-top: 12px;
+        max-width: 520px;
+        font-size: 13px;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.55);
+      }
+
+      .synergies {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+
+      .synergy-box {
+        border: 1px solid var(--line);
+        background: rgba(17,17,20,0.7);
+        padding: 26px 22px;
+      }
+
+      .synergy-kicker {
+        margin: 0 0 16px;
+        font-size: 9px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .synergy-box h3 {
+        margin: 0 0 12px;
+        font-size: 28px;
+        line-height: 1.05;
+        letter-spacing: -0.05em;
+      }
+
+      .synergy-box .rule {
+        margin: 16px 0 18px;
+      }
+
+      .synergy-box p {
+        margin: 0 0 24px;
+        font-size: 13px;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.6);
+      }
+
+      .stats-mini {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+      }
+
+      .mini-stat {
+        background: #000;
+        padding: 18px 16px;
+      }
+
+      .mini-stat strong {
+        display: block;
+        font-size: 28px;
+        letter-spacing: -0.06em;
+      }
+
+      .mini-stat span {
+        display: block;
+        margin-top: 4px;
+        font-size: 9px;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .contact-panel {
+        border: 1px solid var(--line);
+        padding: 28px 22px;
+        background: rgba(17,17,20,0.7);
+      }
+
+      .contact-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 28px;
+      }
+
+      .contact-body {
+        display: grid;
+        grid-template-columns: 1fr 1.1fr;
+        gap: 42px;
+      }
+
+      .contact-list {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-top: 26px;
+      }
+
+      .contact-item {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 10px;
+      }
+
+      .contact-item span {
+        display: block;
+        font-size: 9px;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .contact-item strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 16px;
+        color: rgba(255,255,255,0.85);
+        font-weight: 500;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .field label {
+        font-size: 9px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        padding: 0 0 10px;
+        border: none;
+        border-bottom: 1px solid var(--line);
+        background: transparent;
+        color: var(--text);
+        font-size: 14px;
+        outline: none;
+      }
+
+      .field input::placeholder,
+      .field textarea::placeholder {
+        color: rgba(255,255,255,0.35);
+      }
+
+      .field textarea {
+        resize: none;
+        min-height: 88px;
+      }
+
+      .field select {
+        appearance: none;
+      }
+
+      .submit {
+        width: fit-content;
+        border: none;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: #000;
+        padding: 14px 18px;
+        font-size: 10px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .cursor {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 28px;
+        height: 28px;
+        border: 1px solid rgba(255,255,255,0.7);
+        border-radius: 50%;
+        background: rgba(255,255,255,0.05);
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        opacity: 0;
+        transition: opacity 0.15s ease, transform 0.2s ease;
+        display: none;
+      }
+
+      @media (pointer: fine) {
+        .cursor {
+          display: block;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .hero {
+          min-height: 82vh;
+          padding-top: 110px;
+        }
+
+        .headline {
+          max-width: 760px;
+        }
+
+        .section {
+          padding: 82px 0;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .section-grid,
+        .leadership-wrap,
+        .contact-body {
+          grid-template-columns: 1fr;
+        }
+
+        .portfolio-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .scroll-line {
+          display: none;
+        }
+
+        .portfolio-header {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .section {
+          padding: 76px 0;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .container,
+        .nav {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+
+        .brand-name {
+          letter-spacing: 0.18em;
+        }
+
+        .subhead {
+          font-size: 16px;
+        }
+
+        .hero {
+          min-height: 76vh;
+          padding: 110px 0 64px;
+        }
+
+        .headline {
+          font-size: clamp(2.5rem, 15vw, 4.2rem);
+          line-height: 0.96;
+        }
+
+        .word-wrap {
+          gap: 0.18em 0.25em;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .hero-actions .magnetic {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .stats-grid,
+        .stats-mini {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .contact-panel {
+          padding: 20px 16px;
+        }
+
+        .contact-head {
+          margin-bottom: 18px;
+        }
+
+        .field label,
+        .eyebrow,
+        .card-kicker,
+        .stat-number,
+        .leader-role,
+        .synergy-kicker,
+        .mini-stat span {
+          letter-spacing: 0.18em;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .nav {
+          height: 58px;
+        }
+
+        .brand {
+          gap: 8px;
+        }
+
+        .brand-name {
+          letter-spacing: 0.14em;
+          font-size: 9px;
+        }
+
+        .brand-logo {
+          height: 22px;
+        }
+
+        .eyebrow {
+          margin-bottom: 18px;
+          letter-spacing: 0.2em;
+          font-size: 9px;
+        }
+
+        .headline {
+          margin-bottom: 18px;
+          line-height: 0.94;
+        }
+
+        .subhead {
+          font-size: 15px;
+          line-height: 1.65;
+        }
+
+        .section {
+          padding: 68px 0;
+        }
+
+        .section-title {
+          font-size: clamp(1.8rem, 10vw, 2.8rem);
+        }
+
+        .portfolio-card {
+          min-height: 420px;
+          padding: 20px 18px;
+        }
+
+        .card-title {
+          font-size: clamp(1.8rem, 9vw, 3rem);
+        }
+
+        .contact-item strong,
+        .leader-name,
+        .synergy-box h3 {
+          font-size: 1.05rem;
+        }
+
+        .stats-grid,
+        .stats-mini {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *, *::before, *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="cursor" id="cursor"></div>
+
+      <header class="topbar" id="topbar">
+        <nav class="nav" aria-label="Main navigation">
+          <a href="#top" class="brand" aria-label="Korva home">
+            <img src="Assets/logo.png" alt="Korva Global" class="brand-logo" />
+            <span class="brand-name">Korva</span>
+          </a>
+
+          <div class="nav-links">
+            <a href="#mandate">Mandate</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#contact">Contact</a>
+          </div>
+
+          <div class="nav-actions">
+            <a class="magnetic hide-mobile" href="#contact">Open Portal ↗</a>
+            <button class="menu-button" id="menuToggle" aria-label="Toggle navigation" type="button">
+            <span class="menu-button-lines" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+          </div>
+        </nav>
+
+        <div class="mobile-menu" id="mobileMenu">
+          <a href="#mandate">Mandate</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#contact">Contact</a>
+          <a class="magnetic" href="#contact">Open Portal ↗</a>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="hero">
+          <video class="hero-video" autoplay loop muted playsinline>
+            <source src="Assets/12808277_1080_1920_30fps.mp4" type="video/mp4" />
+          </video>
+          <div class="hero-overlay"></div>
+
+          <div class="container hero-inner">
+            <p class="eyebrow">[ Holding Entity · Nairobi, Kenya ]</p>
+
+            <h1 class="headline">
+              <span class="word-wrap">
+                <span class="word">Architecturing</span>
+                <span class="word">Tomorrow’s</span>
+                <span class="word">Ecosystems.</span>
+              </span>
+            </h1>
+
+            <p class="subhead">Bridging deep-tech innovation with physical reset infrastructure in Nairobi.</p>
+
+            <div class="hero-actions">
+              <a href="#portfolio" class="magnetic">Explore the Ecosystem ↗</a>
+              <a href="#contact" class="magnetic light">Strategic Inquiries ↗</a>
+            </div>
+          </div>
+
+          <div class="scroll-line" aria-hidden="true">
+            <div class="bar"></div>
+            <div class="label">Scroll</div>
+          </div>
+        </section>
+
+        <section class="section reveal" id="mandate">
+          <div class="container section-grid">
+            <div>
+              <p class="eyebrow">Mandate</p>
+              <h2 class="section-title">The dual mandate.</h2>
+            </div>
+
+            <div>
+              <p class="lede">
+                Capital is abundant. Sustainable execution is rare. We operate across two distinct verticals to eliminate the modern scaling bottleneck.
+              </p>
+
+              <div class="rule"></div>
+
+              <p class="muted">
+                Korva Global Corporation sits in the intentional middle ground: building the operating systems for digital scale while engineering the environments that make high-performance living sustainable.
+              </p>
+
+              <div class="stats-grid">
+                <div class="stat-box">
+                  <p class="stat-number">Vertical 01</p>
+                  <strong>Digital Infrastructure</strong>
+                  <span>Full-spectrum product development across platforms, systems, and emerging ventures.</span>
+                </div>
+                <div class="stat-box">
+                  <p class="stat-number">Vertical 02</p>
+                  <strong>Reset Infrastructure</strong>
+                  <span>Human-centric spaces and wellness ecosystems designed to reduce cognitive load and friction.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section reveal" id="portfolio">
+          <div class="container">
+            <div class="portfolio-header">
+              <div>
+                <p class="eyebrow">Portfolio</p>
+                <h2 class="section-title">Operating units.</h2>
+              </div>
+              <p class="eyebrow" style="margin:0;">02 entities</p>
+            </div>
+
+            <div class="portfolio-grid">
+              <article class="portfolio-card">
+                <div class="portfolio-card-inner">
+                  <div>
+                    <div class="card-top">
+                      <div>
+                        <p class="card-kicker">Digital Infrastructure</p>
+                        <p class="card-index">Card 01 / 02</p>
+                      </div>
+                      <div class="card-icon">›</div>
+                    </div>
+
+                    <h3 class="card-title">Korva
+Labs</h3>
+
+                    <div class="card-divider"></div>
+                    <p>
+                      Engineering scalable digital platforms designed for East Africa and relevant to the world—including HouseLink, KenyaWorks, and Nourish.
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="status"><span class="status-dot green"></span> Active Development</div>
+                    <a class="card-button" href="https://korva-labs.netlify.app/" target="_blank" rel="noreferrer">Initialize Korva Labs ↗</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="portfolio-card">
+                <div class="portfolio-card-inner">
+                  <div>
+                    <div class="card-top">
+                      <div>
+                        <p class="card-kicker">Reset Infrastructure</p>
+                        <p class="card-index">Card 02 / 02</p>
+                      </div>
+                      <div class="card-icon">›</div>
+                    </div>
+
+                    <h3 class="card-title">The Kaelõa
+Collective</h3>
+
+                    <div class="card-divider"></div>
+                    <p>
+                      Physical lifestyle and wellness ecosystem engineering human-centric spaces built to biologically lower cognitive load in high-performance hubs.
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="status"><span class="status-dot amber"></span> Phase 1 Rollout</div>
+                    <a class="card-button" href="https://kaeloa.netlify.app/" target="_blank" rel="noreferrer">Join The Collective ↗</a>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section reveal" id="leadership">
+          <div class="container">
+            <p class="eyebrow">Corporate direction</p>
+            <h2 class="section-title" style="max-width: 900px; margin-bottom: 48px;">Directed by: </h2>
+            <div class="leadership-wrap">
+              <div class="leaders">
+                <div class="leader">
+                  <div class="leader-badge">MK</div>
+                  <div>
+                    <p class="leader-name">Mark Keith</p>
+                    <p class="leader-role">Chief Executive Officer</p>
+                    <p class="leader-copy">Capital strategy, governance, and long-view ecosystem expansion.</p>
+                  </div>
+                </div>
+
+                <div class="leader">
+                  <div class="leader-badge">KN</div>
+                  <div>
+                    <p class="leader-name">Kerry Namayan</p>
+                    <p class="leader-role">Chief Operating Officer &amp; Creative Director</p>
+                    <p class="leader-copy">Operational architecture, brand systems, and spatial experience design.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="synergies">
+                <div class="synergy-box">
+                  <p class="synergy-kicker">Strategic synergies</p>
+                  <h3>Building the right infrastructure.</h3>
+                  <div class="rule"></div>
+                  <p>Targeted partnerships with systems builders, institutional operators, and creative infrastructure leaders to accelerate regional momentum.</p>
+                  <a class="magnetic" href="#contact">Open the conversation ↗</a>
+                </div>
+
+                <div class="stats-mini">
+                  <div class="mini-stat"><strong>02</strong><span>Verticals</span></div>
+                  <div class="mini-stat"><strong>EA</strong><span>Primary market</span></div>
+                  <div class="mini-stat"><strong>∞</strong><span>Scale horizon</span></div>
+                  <div class="mini-stat"><strong>B2B</strong><span>Operational motion</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="contact">
+          <div class="container">
+            <div class="contact-panel">
+              <div class="contact-head">
+                <div>
+                  <p class="eyebrow">Open portal</p>
+                  <h2 class="section-title">Open for Strategic Synergies.</h2>
+                </div>
+                <a class="magnetic" href="mailto:legal@korvacorp.com">Contact legal@korvacorp.com ↗</a>
+              </div>
+
+              <div class="contact-body">
+                <div>
+                  <p class="muted" style="max-width: 540px;">
+                    Built for partners, operators, founders, and institutions who want to define the next layer of infrastructure in East Africa and beyond.
+                  </p>
+
+                  <div class="contact-list">
+                    <div class="contact-item"><span>Communications</span><strong>hello@korvacorp.com</strong></div>
+                    <div class="contact-item"><span>Legal</span><strong>legal@korvacorp.com</strong></div>
+                    <div class="contact-item"><span>Headquarters</span><strong>Nairobi, Kenya</strong></div>
+                  </div>
+                </div>
+
+                <form>
+                  <div class="field">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Your name" />
+                  </div>
+
+                  <div class="field">
+                    <label>Organization</label>
+                    <input type="text" placeholder="Fund, firm, or institution" />
+                  </div>
+
+                  <div class="field">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="you@company.com" />
+                  </div>
+
+                  <div class="field">
+                    <label>Nature of inquiry</label>
+                    <select>
+                      <option>Select a category</option>
+                      <option>Strategic partnership</option>
+                      <option>Capital alignment</option>
+                      <option>Media or public relations</option>
+                      <option>Operational collaboration</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label>Message</label>
+                    <textarea placeholder="Tell us how you want to move together…"></textarea>
+                  </div>
+
+                  <button type="button" class="submit">Submit Inquiry ↗</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const cursor = document.getElementById('cursor');
+      const topbar = document.getElementById('topbar');
+      const menuToggle = document.getElementById('menuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+
+      const updateScrollState = () => {
+        if (window.scrollY > 26) {
+          topbar.classList.add('scrolled');
+        } else {
+          topbar.classList.remove('scrolled');
+        }
+      };
+
+      window.addEventListener('scroll', updateScrollState);
+      updateScrollState();
+
+      menuToggle.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.toggle('open');
+        menuToggle.classList.toggle('is-open', isOpen);
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      document.querySelectorAll('.mobile-menu a, .nav-links a').forEach((link) => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('open');
+        });
+      });
+
+      document.querySelectorAll('.magnetic').forEach((button) => {
+        button.addEventListener('mousemove', (event) => {
+          const rect = button.getBoundingClientRect();
+          const x = event.clientX - (rect.left + rect.width / 2);
+          const y = event.clientY - (rect.top + rect.height / 2);
+          button.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px)`;
+        });
+
+        button.addEventListener('mouseleave', () => {
+          button.style.transform = 'translate(0,0)';
+        });
+      });
+
+      if (window.matchMedia('(pointer: fine)').matches) {
+        window.addEventListener('pointermove', (event) => {
+          cursor.style.opacity = '1';
+          cursor.style.transform = `translate(${event.clientX - 14}px, ${event.clientY - 14}px)`;
+        });
+
+        window.addEventListener('pointerleave', () => {
+          cursor.style.opacity = '0';
+        });
+      }
+
+      document.querySelectorAll('.portfolio-card').forEach((card) => {
+        card.addEventListener('mousemove', (event) => {
+          const rect = card.getBoundingClientRect();
+          const px = (event.clientX - rect.left) / rect.width;
+          const py = (event.clientY - rect.top) / rect.height;
+          const rotateY = (px - 0.5) * 15;
+          const rotateX = (0.5 - py) * 15;
+          card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+      });
+
+      // Cinematic Scroll Reveal Observer
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      if ('IntersectionObserver' in window) {
+        document.querySelectorAll('.reveal').forEach((el) => {
+          revealObserver.observe(el);
+        });
+      } else {
+        document.querySelectorAll('.reveal').forEach((el) => {
+          el.classList.add('active');
+        });
+      }
+    </script>
+  </body>
+</html>
