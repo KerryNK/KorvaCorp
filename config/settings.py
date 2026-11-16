@@ -1,13 +1,18 @@
 """Django settings for the Korva Global Corporation website."""
 import os
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
-DEBUG = os.getenv("DJANGO_DEBUG", "False").strip().lower() in {"1", "true", "yes", "on"}
+IS_VERCEL = os.getenv("VERCEL", "").strip().lower() in {"1", "true"}
+DEBUG = (
+    os.getenv("DJANGO_DEBUG", "False").strip().lower() in {"1", "true", "yes", "on"}
+    and not IS_VERCEL
+)
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 if not SECRET_KEY:
     if DEBUG:
@@ -20,11 +25,32 @@ ALLOWED_HOSTS = [
     for host in os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
     if host.strip()
 ]
+for vercel_host in (
+    os.getenv("VERCEL_URL", ""),
+    os.getenv("VERCEL_BRANCH_URL", ""),
+    os.getenv("VERCEL_PROJECT_PRODUCTION_URL", ""),
+):
+    if vercel_host:
+        # Vercel provides hostnames without a scheme; urlsplit also safely handles
+        # a scheme if one is supplied in a local or custom deployment environment.
+        host = urlsplit(vercel_host if "://" in vercel_host else f"//{vercel_host}").hostname
+        if host and host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(host)
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
     if origin.strip()
 ]
+for vercel_host in (
+    os.getenv("VERCEL_URL", ""),
+    os.getenv("VERCEL_BRANCH_URL", ""),
+    os.getenv("VERCEL_PROJECT_PRODUCTION_URL", ""),
+):
+    if vercel_host:
+        host = urlsplit(vercel_host if "://" in vercel_host else f"//{vercel_host}").hostname
+        origin = f"https://{host}" if host else ""
+        if origin and origin not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(origin)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
