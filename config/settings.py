@@ -25,6 +25,8 @@ ALLOWED_HOSTS = [
     for host in os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
     if host.strip()
 ]
+if "korvacorp.vercel.app" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append("korvacorp.vercel.app")
 for vercel_host in (
     os.getenv("VERCEL_URL", ""),
     os.getenv("VERCEL_BRANCH_URL", ""),
@@ -41,6 +43,8 @@ CSRF_TRUSTED_ORIGINS = [
     for origin in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
     if origin.strip()
 ]
+if "https://korvacorp.vercel.app" not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append("https://korvacorp.vercel.app")
 for vercel_host in (
     os.getenv("VERCEL_URL", ""),
     os.getenv("VERCEL_BRANCH_URL", ""),
