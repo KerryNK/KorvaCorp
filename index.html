@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% load static %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Korva Global Corporation</title>
@@ -20,7 +19,10 @@
         --shadow: rgba(255,255,255,0.08);
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
 
       html {
         scroll-behavior: smooth;
@@ -85,6 +87,7 @@
       .topbar.scrolled {
         border-bottom: 1px solid var(--line);
         background: rgba(0,0,0,0.78);
+        -webkit-backdrop-filter: blur(18px);
         backdrop-filter: blur(18px);
       }
 
@@ -442,7 +445,6 @@
       }
 
       .section {
-        border-top: 1px solid var(--line);
         padding: 96px 0;
       }
 
@@ -482,6 +484,35 @@
         line-height: 1.8;
       }
 
+      .muted + .muted {
+        margin-top: 16px;
+      }
+
+      .portfolio-count {
+        margin: 0;
+      }
+
+      .leadership-title {
+        max-width: 900px;
+        margin-bottom: 48px;
+      }
+
+      .contact-intro {
+        max-width: 540px;
+      }
+
+      .mandate-copy {
+        max-width: 760px;
+        margin: 0;
+        color: rgba(255,255,255,0.65);
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .mandate-copy + .mandate-copy {
+        margin-top: 16px;
+      }
+
       .stats-grid {
         display: grid;
         gap: 16px;
@@ -519,19 +550,23 @@
         display: flex;
         align-items: end;
         justify-content: space-between;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
+      }
+
+      .portfolio-intro {
+        margin: 0 0 24px;
       }
 
       .portfolio-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1px;
-        background: var(--line);
+        gap: 0;
+        background: transparent;
       }
 
       .portfolio-card {
         position: relative;
-        min-height: 500px;
+        min-height: 380px;
         padding: 32px 28px;
         background: #000;
         border: 1px solid transparent;
@@ -583,6 +618,10 @@
         font-size: 9px;
         letter-spacing: 0.32em;
         text-transform: uppercase;
+      }
+
+      .card-kicker em {
+        font-style: normal;
       }
 
       .card-index {
@@ -1087,7 +1126,7 @@
         }
 
         .portfolio-card {
-          min-height: 420px;
+          min-height: 320px;
           padding: 20px 18px;
         }
 
@@ -1117,6 +1156,42 @@
           transition: none !important;
         }
       }
+
+      .subhead,
+      .mandate-copy,
+      .portfolio-intro,
+      .portfolio-card p:not(.card-kicker):not(.card-index),
+      .leader-copy,
+      .synergy-box p:not(.synergy-kicker),
+      .contact-intro {
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.7;
+      }
+
+      @media (max-width: 640px) {
+        .subhead,
+        .mandate-copy,
+        .portfolio-intro,
+        .portfolio-card p:not(.card-kicker):not(.card-index),
+        .leader-copy,
+        .synergy-box p:not(.synergy-kicker),
+        .contact-intro {
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .subhead,
+        .mandate-copy,
+        .portfolio-intro,
+        .portfolio-card p:not(.card-kicker):not(.card-index),
+        .leader-copy,
+        .synergy-box p:not(.synergy-kicker),
+        .contact-intro {
+          font-size: 15px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1126,7 +1201,7 @@
       <header class="topbar" id="topbar">
         <nav class="nav" aria-label="Main navigation">
           <a href="#top" class="brand" aria-label="Korva home">
-            <img src="{% static 'logo.png' %}" alt="Korva Global" class="brand-logo" />
+            <img src="/static/logo.png" alt="Korva Global" class="brand-logo" />
             <span class="brand-name">Korva</span>
           </a>
 
@@ -1137,7 +1212,6 @@
           </div>
 
           <div class="nav-actions">
-            <a class="magnetic hide-mobile" href="#contact">Open Portal ↗</a>
             <button class="menu-button" id="menuToggle" aria-label="Toggle navigation" type="button">
             <span class="menu-button-lines" aria-hidden="true">
               <span></span>
@@ -1152,14 +1226,13 @@
           <a href="#mandate">Mandate</a>
           <a href="#portfolio">Portfolio</a>
           <a href="#contact">Contact</a>
-          <a class="magnetic" href="#contact">Open Portal ↗</a>
         </div>
       </header>
 
       <main id="top">
         <section class="hero">
-          <video class="hero-video" autoplay loop muted playsinline>
-            <source src="{% static '12808277_1080_1920_30fps.mp4' %}" type="video/mp4" />
+          <video class="hero-video" autoplay loop muted>
+            <source src="/static/12808277_1080_1920_30fps.mp4" type="video/mp4" />
           </video>
           <div class="hero-overlay"></div>
 
@@ -1168,13 +1241,13 @@
 
             <h1 class="headline">
               <span class="word-wrap">
-                <span class="word">Architecturing</span>
+                <span class="word">Architecting</span>
                 <span class="word">Tomorrow’s</span>
                 <span class="word">Ecosystems.</span>
               </span>
             </h1>
 
-            <p class="subhead">Bridging deep-tech innovation with physical reset infrastructure in Nairobi.</p>
+            <p class="subhead">Developing digital platforms, community experiences, and lifestyle spaces that help people and businesses grow with clarity, intention, and impact.</p>
 
             <div class="hero-actions">
               <a href="#portfolio" class="magnetic">Explore the Ecosystem ↗</a>
@@ -1192,30 +1265,32 @@
           <div class="container section-grid">
             <div>
               <p class="eyebrow">Mandate</p>
-              <h2 class="section-title">The dual mandate.</h2>
+              <h2 class="section-title">One connected mandate.</h2>
             </div>
 
             <div>
-              <p class="lede">
-                Capital is abundant. Sustainable execution is rare. We operate across two distinct verticals to eliminate the modern scaling bottleneck.
+              <p class="mandate-copy">
+                Korva Global Corporation builds at the intersection of technology, community, and lived experience.
               </p>
 
-              <div class="rule"></div>
+              <p class="mandate-copy">
+                Through our subsidiaries, we develop digital platforms that help people and businesses operate more effectively, while creating spaces and experiences that support wellbeing, connection, and intentional living.
+              </p>
 
-              <p class="muted">
-                Korva Global Corporation sits in the intentional middle ground: building the operating systems for digital scale while engineering the environments that make high-performance living sustainable.
+              <p class="mandate-copy">
+                We exist to build useful systems, meaningful communities, and enduring businesses.
               </p>
 
               <div class="stats-grid">
                 <div class="stat-box">
-                  <p class="stat-number">Vertical 01</p>
-                  <strong>Digital Infrastructure</strong>
-                  <span>Full-spectrum product development across platforms, systems, and emerging ventures.</span>
+                  <p class="stat-number">Digital Infrastructure</p>
+                  <strong>Korva Labs</strong>
+                  <span>Building digital platforms, tools, and technology-enabled ventures for African and global markets.</span>
                 </div>
                 <div class="stat-box">
-                  <p class="stat-number">Vertical 02</p>
-                  <strong>Reset Infrastructure</strong>
-                  <span>Human-centric spaces and wellness ecosystems designed to reduce cognitive load and friction.</span>
+                  <p class="stat-number">Community &amp; Lifestyle</p>
+                  <strong>The Kaelõa Collective</strong>
+                  <span>Creating intentional spaces, events, and experiences that support connection, creativity, and wellbeing.</span>
                 </div>
               </div>
             </div>
@@ -1226,36 +1301,28 @@
           <div class="container">
             <div class="portfolio-header">
               <div>
-                <p class="eyebrow">Portfolio</p>
-                <h2 class="section-title">Operating units.</h2>
+                <h2 class="section-title">Our subsidiaries.</h2>
               </div>
-              <p class="eyebrow" style="margin:0;">02 entities</p>
+              <p class="eyebrow portfolio-count">Subsidiaries. One shared direction.</p>
             </div>
+
+            <p class="lede portfolio-intro">Korva Global Corporation builds across digital infrastructure and community-centered lifestyle experiences.</p>
 
             <div class="portfolio-grid">
               <article class="portfolio-card">
                 <div class="portfolio-card-inner">
                   <div>
-                    <div class="card-top">
-                      <div>
-                        <p class="card-kicker">Digital Infrastructure</p>
-                        <p class="card-index">Card 01 / 02</p>
-                      </div>
-                      <div class="card-icon">›</div>
-                    </div>
-
                     <h3 class="card-title">Korva
 Labs</h3>
 
                     <div class="card-divider"></div>
                     <p>
-                      Engineering scalable digital platforms designed for East Africa and relevant to the world—including HouseLink, KenyaWorks, and Nourish.
+                      Korva Labs builds digital platforms, tools, and technology-enabled ventures for African and global markets.
                     </p>
                   </div>
 
                   <div>
-                    <div class="status"><span class="status-dot green"></span> Active Development</div>
-                    <a class="card-button" href="https://korva-labs.netlify.app/" target="_blank" rel="noreferrer">Initialize Korva Labs ↗</a>
+                    <a class="card-button" href="https://korva-labs.netlify.app/" target="_blank" rel="noopener noreferrer">Explore Korva Labs ↗</a>
                   </div>
                 </div>
               </article>
@@ -1263,26 +1330,17 @@ Labs</h3>
               <article class="portfolio-card">
                 <div class="portfolio-card-inner">
                   <div>
-                    <div class="card-top">
-                      <div>
-                        <p class="card-kicker">Reset Infrastructure</p>
-                        <p class="card-index">Card 02 / 02</p>
-                      </div>
-                      <div class="card-icon">›</div>
-                    </div>
-
                     <h3 class="card-title">The Kaelõa
 Collective</h3>
 
                     <div class="card-divider"></div>
                     <p>
-                      Physical lifestyle and wellness ecosystem engineering human-centric spaces built to biologically lower cognitive load in high-performance hubs.
+                      The Kaelõa Collective creates intentional spaces, events, and lifestyle experiences that bring people together through community, creativity, and wellbeing.
                     </p>
                   </div>
 
                   <div>
-                    <div class="status"><span class="status-dot amber"></span> Phase 1 Rollout</div>
-                    <a class="card-button" href="https://kaeloa.netlify.app/" target="_blank" rel="noreferrer">Join The Collective ↗</a>
+                    <a class="card-button" href="https://kaeloa.netlify.app/" target="_blank" rel="noopener noreferrer">Join the Collective ↗</a>
                   </div>
                 </div>
               </article>
@@ -1292,8 +1350,8 @@ Collective</h3>
 
         <section class="section reveal" id="leadership">
           <div class="container">
-            <p class="eyebrow">Corporate direction</p>
-            <h2 class="section-title" style="max-width: 900px; margin-bottom: 48px;">Directed by: </h2>
+            <p class="eyebrow">Leadership</p>
+            <h2 class="section-title leadership-title">Led by:</h2>
             <div class="leadership-wrap">
               <div class="leaders">
                 <div class="leader">
@@ -1301,7 +1359,7 @@ Collective</h3>
                   <div>
                     <p class="leader-name">Mark Keith</p>
                     <p class="leader-role">Chief Executive Officer</p>
-                    <p class="leader-copy">Capital strategy, governance, and long-view ecosystem expansion.</p>
+                    <p class="leader-copy">Strategy, governance, capital, and long-term growth.</p>
                   </div>
                 </div>
 
@@ -1310,25 +1368,25 @@ Collective</h3>
                   <div>
                     <p class="leader-name">Kerry Namayan</p>
                     <p class="leader-role">Chief Operating Officer &amp; Creative Director</p>
-                    <p class="leader-copy">Operational architecture, brand systems, and spatial experience design.</p>
+                    <p class="leader-copy">Operations, brand, creative direction, and experience design.</p>
                   </div>
                 </div>
               </div>
 
               <div class="synergies">
                 <div class="synergy-box">
-                  <p class="synergy-kicker">Strategic synergies</p>
-                  <h3>Building the right infrastructure.</h3>
+                  <p class="synergy-kicker">Partnerships</p>
+                  <h3>Building with intention.</h3>
                   <div class="rule"></div>
-                  <p>Targeted partnerships with systems builders, institutional operators, and creative infrastructure leaders to accelerate regional momentum.</p>
-                  <a class="magnetic" href="#contact">Open the conversation ↗</a>
+                  <p>Partnerships with founders, operators, creators, institutions, and community leaders to build meaningful products and experiences.</p>
+                  <a class="magnetic" href="#contact">Start a Conversation ↗</a>
                 </div>
 
                 <div class="stats-mini">
-                  <div class="mini-stat"><strong>02</strong><span>Verticals</span></div>
-                  <div class="mini-stat"><strong>EA</strong><span>Primary market</span></div>
-                  <div class="mini-stat"><strong>∞</strong><span>Scale horizon</span></div>
-                  <div class="mini-stat"><strong>B2B</strong><span>Operational motion</span></div>
+                  <div class="mini-stat"><strong>Two</strong><span>Subsidiaries</span></div>
+                  <div class="mini-stat"><strong>EA</strong><span>Primary Market</span></div>
+                  <div class="mini-stat"><strong>Global</strong><span>Growth Horizon</span></div>
+                  <div class="mini-stat"><strong>B2B &amp; B2C</strong><span>Operating Model</span></div>
                 </div>
               </div>
             </div>
@@ -1340,16 +1398,15 @@ Collective</h3>
             <div class="contact-panel">
               <div class="contact-head">
                 <div>
-                  <p class="eyebrow">Open portal</p>
-                  <h2 class="section-title">Open for Strategic Synergies.</h2>
+                  <p class="eyebrow">Contact.</p>
+                  <h2 class="section-title">Open for partnerships and collaborations.</h2>
                 </div>
-                <a class="magnetic" href="mailto:legal@korvacorp.com">Contact legal@korvacorp.com ↗</a>
               </div>
 
               <div class="contact-body">
                 <div>
-                  <p class="muted" style="max-width: 540px;">
-                    Built for partners, operators, founders, and institutions who want to define the next layer of infrastructure in East Africa and beyond.
+                  <p class="muted contact-intro">
+                    For partners, operators, founders, creators, and institutions building useful products and meaningful experiences across Africa and beyond.
                   </p>
 
                   <div class="contact-list">
@@ -1409,6 +1466,11 @@ Collective</h3>
       const topbar = document.getElementById('topbar');
       const menuToggle = document.getElementById('menuToggle');
       const mobileMenu = document.getElementById('mobileMenu');
+      const heroVideo = document.querySelector('.hero-video');
+
+      if (heroVideo && 'playsInline' in heroVideo) {
+        heroVideo.playsInline = true;
+      }
 
       const updateScrollState = () => {
         if (window.scrollY > 26) {
