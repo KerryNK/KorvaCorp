@@ -9,11 +9,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 IS_VERCEL = os.getenv("VERCEL", "").strip().lower() in {"1", "true"}
-DEBUG = (
-    os.getenv("DJANGO_DEBUG", "False").strip().lower() in {"1", "true", "yes", "on"}
-    and not IS_VERCEL
-)
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
+raw_debug = os.getenv("DJANGO_DEBUG")
+if raw_debug is None:
+    DEBUG = not IS_VERCEL
+else:
+    DEBUG = raw_debug.strip().lower() in {"1", "true", "yes", "on"} and not IS_VERCEL
+
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "").strip()
 if not SECRET_KEY:
     if DEBUG:
         SECRET_KEY = "local-development-only-insecure-key-change-before-deploying"

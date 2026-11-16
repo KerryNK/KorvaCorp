@@ -1,5 +1,11 @@
+import importlib
+import os
+from unittest.mock import patch
+
 from django.test import TestCase
 from django.urls import reverse
+
+import config.settings as settings_module
 
 from .models import ContactSubmission
 
@@ -46,3 +52,9 @@ class WebsiteTests(TestCase):
         )
         self.assertRedirects(response, f"{reverse('home')}#contact")
         self.assertEqual(ContactSubmission.objects.count(), 0)
+
+    def test_missing_environment_defaults_to_local_development_settings(self):
+        with patch.dict(os.environ, {}, clear=True), patch("dotenv.load_dotenv", return_value=False):
+            reloaded = importlib.reload(settings_module)
+            self.assertTrue(reloaded.DEBUG)
+            self.assertTrue(reloaded.SECRET_KEY)
