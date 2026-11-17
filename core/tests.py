@@ -17,7 +17,8 @@ class WebsiteTests(TestCase):
         self.assertContains(response, "/static/logo.png")
         self.assertContains(response, "/static/12808277_1080_1920_30fps.mp4")
 
-    def test_valid_contact_submission_is_saved_and_redirected(self):
+    @patch("core.views.send_mail", return_value=1)
+    def test_valid_contact_submission_is_saved_emailed_and_redirected(self, mocked_send_mail):
         response = self.client.post(
             reverse("home"),
             {
@@ -31,12 +32,33 @@ class WebsiteTests(TestCase):
         )
         self.assertRedirects(response, f"{reverse('home')}#contact")
         self.assertEqual(ContactSubmission.objects.count(), 1)
+        mocked_send_mail.assert_called_once()
+        self.assertEqual(mocked_send_mail.call_args.kwargs["recipient_list"], ["kkcorp524@gmail.com"])
+        self.assertEqual(mocked_send_mail.call_args.kwargs["reply_to"], ["visitor@example.com"])
+
+    @patch("core.views.send_mail", return_value=0)
+    def test_email_failure_keeps_submission_and_reports_fallback(self, mocked_send_mail):
+        response = self.client.post(
+            reverse("home"),
+            {
+                "full_name": "Test Visitor",
+                "organization": "",
+                "email": "visitor@example.com",
+                "inquiry_type": "strategic_partnership",
+                "message": "We would like to discuss a partnership.",
+                "website": "",
+            },
+            follow=True,
+        )
+        self.assertEqual(ContactSubmission.objects.count(), 1)
+        self.assertContains(response, "Your inquiry was saved, but we couldn&#x27;t email it right now.")
+        mocked_send_mail.assert_called_once()
 
     def test_invalid_contact_submission_is_not_saved(self):
         response = self.client.post(reverse("home"), {"email": "not-an-email"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ContactSubmission.objects.count(), 0)
-        self.assertContains(response, "Enter a valid email address.")
+        self.assertContains(response, "Please enter a valid email address.")
 
     def test_honeypot_submission_is_not_saved(self):
         response = self.client.post(

@@ -14,6 +14,8 @@ Django serves the existing single-page Korva Global website, its original assets
 
 Create an administrator with `python manage.py createsuperuser`, then sign in at `/admin/`. Contact form submissions are stored as `ContactSubmission` records and can be searched and filtered from the admin.
 
+Valid contact inquiries are emailed to `kkcorp524@gmail.com` and also saved in the database. For production, configure `CONTACT_RECIPIENT_EMAIL`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, and `DEFAULT_FROM_EMAIL` in the hosting environment. Gmail SMTP requires a Google App Password (with 2-Step Verification enabled); use the 16-character app password, not the account password. Keep it private and never commit it. The local `.env.example` uses Django's console email backend so test messages appear in the development server output instead of being sent.
+
 ## Project map
 
 - `index.html` is the original landing page, rendered through Django's template engine. It remains at the project root so its large self-contained design is not restructured.
@@ -30,6 +32,7 @@ Add a view in `core/views.py`, a route in `core/urls.py`, and a template. The ex
 
 - Set `DJANGO_DEBUG=False`, a unique `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, and `DJANGO_CSRF_TRUSTED_ORIGINS` in the deployment environment.
 - **Vercel:** add `DJANGO_SECRET_KEY` in Project Settings → Environment Variables, enabled for every environment you deploy (Production, Preview, and Development as applicable). Vercel imports Django settings during its build, so the variable must be available at build time as well as runtime. Generate a key with `python -c "import secrets; print(secrets.token_urlsafe(50))"`; enter it directly in Vercel and do not commit it. Also configure `DJANGO_ALLOWED_HOSTS` with the deployed hostname(s) and `DJANGO_CSRF_TRUSTED_ORIGINS` with their `https://` origins, then redeploy.
+- **Email delivery:** on Vercel, configure `CONTACT_RECIPIENT_EMAIL=kkcorp524@gmail.com`, `EMAIL_HOST=smtp.gmail.com`, `EMAIL_PORT=587`, `EMAIL_USE_TLS=True`, `EMAIL_HOST_USER=kkcorp524@gmail.com`, `EMAIL_HOST_PASSWORD` with a Google App Password, and `DEFAULT_FROM_EMAIL=kkcorp524@gmail.com`. Do not add the app password to source control. Configure these variables in the same Vercel environments as the deployment and redeploy; until credentials are configured, submissions are retained in the database and an email delivery error is logged.
 - Vercel's `VERCEL_URL`, `VERCEL_BRANCH_URL`, and `VERCEL_PROJECT_PRODUCTION_URL` hostnames are automatically added to Django's allowed hosts and CSRF trusted origins. Set `DJANGO_ALLOWED_HOSTS` and `DJANGO_CSRF_TRUSTED_ORIGINS` as well for any custom domains.
 - Enable `DJANGO_SECURE_SSL_REDIRECT` and `DJANGO_SECURE_COOKIES` when HTTPS is configured at the application or trusted proxy layer. After confirming HTTPS is permanent, set `DJANGO_SECURE_HSTS_SECONDS` (for example, `31536000`). Enable `DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS` or `DJANGO_SECURE_HSTS_PRELOAD` only after confirming their additional domain-wide implications.
 - Install dependencies, run `python manage.py migrate`, then `python manage.py collectstatic --noinput`.
