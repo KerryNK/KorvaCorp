@@ -110,6 +110,7 @@ if DATABASE_URL:
         "default": dj_database_url.parse(
             DATABASE_URL,
             conn_max_age=600,
+            conn_health_checks=True,
             ssl_require=not DEBUG,
         )
     }
