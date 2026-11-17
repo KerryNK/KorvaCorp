@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").strip()
+SUPABASE_PUBLISHABLE_KEY = os.getenv("SUPABASE_PUBLISHABLE_KEY", "").strip()
+
 IS_VERCEL = os.getenv("VERCEL", "").strip().lower() in {"1", "true"}
 raw_debug = os.getenv("DJANGO_DEBUG")
 if raw_debug is None:

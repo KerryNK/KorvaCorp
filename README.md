@@ -6,7 +6,7 @@ Django serves the existing single-page Korva Global website, its original assets
 
 1. Create and activate a virtual environment.
 2. Install dependencies with `pip install -r requirements.txt`.
-3. Copy `.env.example` to `.env`. For local development, set `DJANGO_DEBUG=True`; change the secret key before deployment.
+3. Copy `.env.example` to `.env`. For local development, set `DJANGO_DEBUG=True`; change the secret key before deployment. Add your Supabase project URL and publishable key to `.env` as `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`.
 4. Initialize the database with `python manage.py migrate`.
 5. Start the development server with `python manage.py runserver` and open `http://127.0.0.1:8000/`.
 
@@ -17,6 +17,10 @@ Create an administrator with `python manage.py createsuperuser`, then sign in at
 Valid contact inquiries are emailed to `kkcorp524@gmail.com` and also saved in the database. For production, configure `CONTACT_RECIPIENT_EMAIL`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, and `DEFAULT_FROM_EMAIL` in the hosting environment. Gmail SMTP requires a Google App Password (with 2-Step Verification enabled); use the 16-character app password, not the account password. Keep it private and never commit it. The local `.env.example` uses Django's console email backend so test messages appear in the development server output instead of being sent.
 
 For durable inquiry storage on Vercel, configure `DATABASE_URL` to a hosted PostgreSQL database. The default local database is SQLite and should not be used for writes from Vercel serverless functions. Apply migrations to the hosted database before using the live contact form (`python manage.py migrate` with `DATABASE_URL` set).
+
+## Supabase
+
+The project remains a Django application; do not add the supplied Flask `app.py` example, which would create a second web application and an unrelated `todos` page. The Supabase Python SDK is installed from `requirements.txt`. `core/supabase_client.py` provides a lazy client factory for Django code. Configure `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` in the ignored local `.env` file and in deployment environment variables before using it. The publishable key is intended for client use; enforce appropriate Supabase Row Level Security policies, and never put a `service_role` key in browser code or commit it.
 
 ## Project map
 
