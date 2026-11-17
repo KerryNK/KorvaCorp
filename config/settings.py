@@ -33,6 +33,9 @@ ALLOWED_HOSTS = [
 ]
 if "korvacorp.vercel.app" not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append("korvacorp.vercel.app")
+for custom_host in ("korvacorp.com", "www.korvacorp.com"):
+    if custom_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(custom_host)
 for vercel_host in (
     os.getenv("VERCEL_URL", ""),
     os.getenv("VERCEL_BRANCH_URL", ""),
@@ -51,6 +54,9 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 if "https://korvacorp.vercel.app" not in CSRF_TRUSTED_ORIGINS:
     CSRF_TRUSTED_ORIGINS.append("https://korvacorp.vercel.app")
+for custom_origin in ("https://korvacorp.com", "https://www.korvacorp.com"):
+    if custom_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(custom_origin)
 for vercel_host in (
     os.getenv("VERCEL_URL", ""),
     os.getenv("VERCEL_BRANCH_URL", ""),
