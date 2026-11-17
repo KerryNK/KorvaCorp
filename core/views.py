@@ -20,6 +20,14 @@ def home(request):
     return render(request, "index.html", {"contact_form": form})
 
 
+def privacy_policy(request):
+    return render(request, "core/privacy_policy.html")
+
+
+def terms_of_use(request):
+    return render(request, "core/terms_of_use.html")
+
+
 def page_not_found(request, exception):
     return render(request, "core/404.html", status=404)
 
